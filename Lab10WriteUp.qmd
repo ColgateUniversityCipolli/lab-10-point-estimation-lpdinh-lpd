@@ -193,17 +193,42 @@ PMF.plot.3 <- ggplot() +
   ylab("Probability") +
   theme_bw()
 
-PMF.plot.1 | PMF.plot.2 | PMF.plot.3
+PMF.plot.1 / PMF.plot.2 / PMF.plot.3
 ```
 
 ## Part c
 What is your best assessment of what $\theta$ is doing in this setting. Consider when a 6-0 blowout is most likely, and when a 5-6 nail-biter is most likely. Note here we should treat the match as a fixed $n=11$ as we did for $n=3$ in Lab 8.\
 **Note:** In lab 8, we saw that small $\theta$ meant wins came in bunches (clumped together), so there were more 2-0 wins in a best of three series.
 
+**Solution**
+When $\theta=0.5$, the probability of winning 6-0 or losing 0-6 is high (they're not actually playing 11 legs). When $\theta=1$, it's a Binomial distribution. When $\theta=1.5$, the player is highly likely to lose 5-6 or win 6-5 (close matches).
+
 # Question 2
 
 ## Part a
 Altham's Multiplicative Binomial Distribution does not typically simplify to the clean $E(X)=np$ seen in the Binomial distribution, unless $\theta = 1$. Write out the expression that would need to be solved to find $E(X^k)$, and then write a function that computes it given the proposed parameter values $p$ (`prob`) and $\theta$ (`theta`).
+
+**Solution**
+$$E(X^k) = \sum_{x=0}^{n} x^k \cdot f_X(x)$$
+
+```{r}
+kth_moment <- function(k, size, prob, theta){
+  normalizing.constant <- 0
+  for(j in 0:size){
+    normalizing.constant <- normalizing.constant + 
+      choose(size, j) * prob^j * (1-prob)^(size-j) * theta^(j*(size-j))
+  }
+  # E(X^k)
+  result <- 0
+  for (x in 0:size){
+    result <- result + 
+    x^k * (1/normalizing.constant) *
+    choose(size, x) * prob^x * (1-prob)^(size-x) * theta^(x*(size-x)) *
+      (x>=0)*(x<=size)
+  }
+  print(result)
+  }
+```
 
 ## Part b
 Describe how you can use your answer to part a to find Method of Moments estimates for the parameters $p$ and $\theta$ for Altham's Multiplicative Binomial Distribution based on data.
