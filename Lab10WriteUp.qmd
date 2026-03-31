@@ -233,11 +233,35 @@ kth_moment <- function(k, size, prob, theta){
 ## Part b
 Describe how you can use your answer to part a to find Method of Moments estimates for the parameters $p$ and $\theta$ for Altham's Multiplicative Binomial Distribution based on data.
 
+**Solution**
+MOM sets sample moments equal to population moments. Since the Altham's Multiplicative Binomial Distribution has 2 unknown parameters, so we'll need 2 equations:
+$$E(X^1) = x^k \cdot f_X(x)$$
+$$E(X^2) = x^2 \cdot f_X(x)$$
+
 ## Part c
 Write a function that computes the log-likelihood for Altham's Multiplicative Binomial Distribution, given data (`x`) and proposed parameter values $p$ (`prob`) and $\theta$ (`theta`).
 
+**Solution**
+
+```{r}
+lldaltbinom <- function(prob, theta, x, size) {
+  # ensuring p is between 0 and 1
+  prob <- ifelse(mle, 1/(1+exp(-par[1])), par[1]) 
+  # ensuring theta is positive
+  theta <- ifelse(mle, exp(par[2]), par[2])
+
+  sum(log(daltbinom(x, size, prob, theta)))
+  # if mle is true (we're trying to find mle), return the negative log-likelihood. if it's false, return the log-likelihood)
+  ifelse(mle, -ll, ll)
+}
+
+```
+
 ## Part d
 Describe how you can use your answer to part c to find Maximum Likelihood estimates for the parameters $p$ and $\theta$ for Altham's Multiplicative Binomial Distribution based on data.
+
+**Solution**
+Find the values of $p$ and $\theta$ that maximize the log-likelihood by using `optim`.
 
 # Lab 10
 Peter "Snakebite" Wright is a two-time Professional Darts Corporation World Champion (2020, 2022) and a former World No. 1. He is one of the sport's most decorated players, winning nearly 50 PDC titles including the World Matchplay, UK Open, and multiple European Championships. 
