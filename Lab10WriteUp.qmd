@@ -293,6 +293,41 @@ In `pdc2024.csv`, I have provided the data for the 2024 Premier League season. T
   
   Summarize the data. What do the data tell us about the breakdown of the results?
 
+```{r}
+pdc = read_csv("pdc2024.csv")
+pdc.cleaned <- pdc|>
+  filter(Score!= "w/o",
+        Night != "Finals")|>
+  separate(Score, into = c("WinnerLegs", "LoserLegs"))
+```
+
+```{r}
+player.stats = tibble(
+  Player = c("Luke Littler", "Luke Humphries", "Michael van Gerwen", "Michael Smith", "Nathan Aspinall", "Rob Cross", "Gerwyn Price", "Peter Wright"),
+  LegsWon = c(
+    sum(as.numeric(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Luke Littler"])),
+    sum(as.numeric(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Luke Humphries"])),
+    sum(as.numeric(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Michael van Gerwen"])),
+    sum(as.numeric(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Michael Smith"])),
+    sum(as.numeric(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Nathan Aspinall"])),
+    sum(as.numeric(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Rob Cross"])),
+    sum(as.numeric(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Gerwyn Price"])),
+    sum(as.numeric(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Peter Wright"]))
+  ),
+  LegsLost = c(
+    sum(as.numeric(pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Luke Littler"])),
+    sum(as.numeric(pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Luke Humphries"])),
+    sum(as.numeric(pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Michael van Gerwen"])),
+    sum(as.numeric(pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Michael Smith"])),
+    sum(as.numeric(pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Nathan Aspinall"])),
+    sum(as.numeric(pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Rob Cross"])),
+    sum(as.numeric(pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Gerwyn Price"])),
+    sum(as.numeric(pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Peter Wright"]))
+  )
+)
+
+```
+
 ## Altham's Multiplicative Binomial Distribution
 For each player in the 2024 season, use the number of legs won in each match to compute maximium likelihood estimates for $p$ and $\theta$. \
 **Note**: The "for each" here can be done more efficiently with a function or a loop!
@@ -302,6 +337,28 @@ For each player in the 2024 season, use the number of legs won in each match to 
 **Note:** In Lecture on Monday, we used transformations to restrict how `optim()` searches the parameter space. For example, here, you might consider
 `p <- 1/(1+exp(-par[1]))` and `theta <- exp(par[2])`.
 * Make comments about the MLEs in the context of the standings.
+
+**Solutions**
+
+```{r}
+LT = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Luke Littler"],
+                  pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Luke Littler"]))
+LH = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Luke Humphries"],
+                  pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Luke Humphries"]))
+MG = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Michael van Gerwen"],
+                  pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Michael van Gerwen"]))
+MS = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Michael Smith"],
+                  pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Michael Smith"]))
+NAs = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Nathan Aspinall"],
+                  pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Nathan Aspinall"]))
+RC = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Rob Cross"],
+                  pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Rob Cross"]))
+GP = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Gerwyn Price"],
+                  pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Gerwyn Price"]))
+PW = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Peter Wright"],
+                  pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Peter Wright"]))
+
+```
 
 ## Altham's Multiplicative Beta Binomial Distribution
 
