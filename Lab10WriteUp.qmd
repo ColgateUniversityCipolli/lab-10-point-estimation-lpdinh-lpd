@@ -246,9 +246,9 @@ Write a function that computes the log-likelihood for Altham's Multiplicative Bi
 ```{r}
 lldaltbinom <- function(prob, theta, x, size) {
   # ensuring p is between 0 and 1
-  prob <- ifelse(mle, 1/(1+exp(-par[1])), par[1]) 
+  prob <- ifelse(mle, 1/(1+exp(-prob)), prob) 
   # ensuring theta is positive
-  theta <- ifelse(mle, exp(par[2]), par[2])
+  theta <- ifelse(mle, exp(theta), theta)
 
   sum(log(daltbinom(x, size, prob, theta)))
   # if mle is true (we're trying to find mle), return the negative log-likelihood. if it's false, return the log-likelihood)
@@ -340,25 +340,76 @@ For each player in the 2024 season, use the number of legs won in each match to 
 
 **Solutions**
 
+Create vectors
 ```{r}
-LT = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Luke Littler"],
-                  pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Luke Littler"]))
-LH = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Luke Humphries"],
-                  pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Luke Humphries"]))
-MG = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Michael van Gerwen"],
-                  pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Michael van Gerwen"]))
-MS = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Michael Smith"],
-                  pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Michael Smith"]))
-NAs = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Nathan Aspinall"],
-                  pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Nathan Aspinall"]))
-RC = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Rob Cross"],
-                  pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Rob Cross"]))
-GP = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Gerwyn Price"],
-                  pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Gerwyn Price"]))
-PW = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Peter Wright"],
-                  pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Peter Wright"]))
-
+wins = list(
+  LT = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Luke Littler"],
+                  pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Luke Littler"])),
+  LH = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Luke Humphries"],
+                  pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Luke Humphries"])),
+  MG = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Michael van Gerwen"],
+                    pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Michael van Gerwen"])),
+  MS = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Michael Smith"],
+                    pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Michael Smith"])),
+  NAs = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Nathan Aspinall"],
+                    pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Nathan Aspinall"])),
+  RC = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Rob Cross"],
+                    pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Rob Cross"])),
+  GP = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Gerwyn Price"],
+                    pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Gerwyn Price"])),
+  PW = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Peter Wright"],
+                    pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Peter Wright"]))
+)
 ```
+
+Finding MLE
+
+```{r}
+# leave functions out of the loop
+daltbinom <- function(x, size, prob, theta){
+  normalizing.constant <- 0
+  for(j in 0:size){
+    normalizing.constant <- normalizing.constant + 
+      choose(size, j) * prob^j * (1-prob)^(size-j) * theta^(j*(size-j))
+  }
+  (1/normalizing.constant) *
+    choose(size, x) * prob^x * (1-prob)^(size-x) * theta^(x*(size-x)) *
+      (x>=0)*(x<=size)
+}
+
+lldaltbinom <- function(par, data, mle = F){
+  prob  <- ifelse(mle, 1/(1+exp(-par[1])), par[1])
+  theta <- ifelse(mle, exp(par[2]), par[2])
+  
+  ll <- sum(log(daltbinom(data, size=11, prob = prob, theta = theta)))
+  ifelse(mle, -ll, ll)
+}
+# create tibble to store data
+results <- tibble(
+  Player = c("Luke Littler", "Luke Humphries", "Michael van Gerwen", "Michael Smith", "Nathan Aspinall", "Rob Cross", "Gerwyn Price", "Peter Wright"),
+  Probability = rep(NA, 8),
+  Theta = rep(NA, 8))
+
+# loop
+for(i in 1:length(wins)){
+  mle <- optim(par = c(0,0),
+            fn = lldaltbinom,
+            data= wins[[i]],
+            mle=T)
+results$Probability[i] <- 1/(1+exp(-mle$par[1]))
+results$Theta[i]<- exp(mle$par[2])
+}
+```
+
+```{r}
+#| label: tbl-probtheta
+#| tbl-cap: "$p$ and $\\theta$ for each player"
+#| tbl-align: "center"
+#| size: scriptsize
+#| echo: false
+results |> knitr::kable(digits = 2)
+```
+
 
 ## Altham's Multiplicative Beta Binomial Distribution
 
