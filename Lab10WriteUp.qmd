@@ -342,6 +342,7 @@ For each player in the 2024 season, use the number of legs won in each match to 
 
 Create vectors
 ```{r}
+# use list because vectors are of different lengths
 wins = list(
   LT = as.numeric(c(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Luke Littler"],
                   pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Luke Littler"])),
@@ -428,6 +429,77 @@ For each player in the 2024 season, use the number of legs won in each match to 
 \end{align*}
 * Make comments about the MLEs in the context of the standings.\
 **Note**: The players alternate who throws first in a leg has the mathematical "head start" to reach a finish before their opponent can take another turn. Players alternate who throws first with each leg.
+
+**Solution**
+
+```{r}
+daltbbinom.single <- function(x, size, alpha, beta, theta){
+    integrand <- function(p) {
+    sapply(p, function(p_val){
+             daltbinom(x, size, p_val, theta) * dbeta(p_val, alpha, beta)
+           }
+    )
+  }
+  res <- try(integrate(integrand, lower = 1e-7, upper = 1 - 1e-7)$value * 
+                  (x>=0)*(x<=size), 
+             silent = TRUE)
+  if(inherits(res, "try-error")) return(0.1^6)
+  
+  res
+}
+daltbbinom <- function(x, size, alpha, beta, theta){
+  sapply(X=x, FUN=daltbbinom.single, size=size, alpha=alpha, beta=beta, theta=theta)
+}
+
+lldaltbbinom <- function(par, data, mle = F){
+  alpha  <- ifelse(mle, exp(par[1]), par[1])
+  beta <- ifelse(mle, exp(par[2]), par[2])
+  theta <- ifelse(mle, exp(par[3]), par[3])
+  
+  ll <- sum(log(daltbbinom(data, size=11, alpha = alpha, beta = beta, theta = theta)))
+  ifelse(mle, -ll, ll)
+}
+# create tibble to store data
+results.2 <- tibble(
+  Player = c("Luke Littler", "Luke Humphries", "Michael van Gerwen", "Michael Smith", "Nathan Aspinall", "Rob Cross", "Gerwyn Price", "Peter Wright"),
+  Alpha = rep(NA, 8),
+  Beta = rep(NA, 8),
+  Theta = rep(NA, 8),
+  # name of column can't have space
+  Mean = rep(NA, 8),
+  SD = rep(NA, 8))
+```
+
+```{r}
+# loop
+for(i in 1:length(wins)){
+  mle <- optim(par = c(0,0,0),
+            fn = lldaltbbinom,
+            # use [[]] instead of [] because it's a list
+            data= wins[[i]],
+            mle=T)
+  # extract before using
+  a <- exp(mle$par[1])
+  b  <- exp(mle$par[2])
+  # calculate parameters of distributions
+  mean = a/(a+b)
+  sd = sqrt((a*b)/((a+b)^2 * (a+b+1)))
+results.2$Alpha[i] <- exp(mle$par[1])
+results.2$Beta[i] <- exp(mle$par[2])
+results.2$Theta[i]<- exp(mle$par[3])
+results.2$BetaDistributionMean[i] <- mean
+results.2$BetaDistributionVariance[i] <- sd
+}
+```
+
+```{r}
+#| label: tbl-beta
+#| tbl-cap: "$a$, $b$, and $\\theta$ for each player"
+#| tbl-align: "center"
+#| size: scriptsize
+#| echo: false
+results.2 |> knitr::kable(digits = 2)
+```
 
 ## Executive Summary
 Summarize the work you've done here to provide a brief (200-300 word) data-driven summary of the 2024 Premier League season using your work in Lab 10. Your summary should be professional, clear, and all claims should be corroborated with statistical support.
