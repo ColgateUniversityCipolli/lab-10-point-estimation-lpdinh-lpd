@@ -487,8 +487,8 @@ for(i in 1:length(wins)){
 results.2$Alpha[i] <- exp(mle$par[1])
 results.2$Beta[i] <- exp(mle$par[2])
 results.2$Theta[i]<- exp(mle$par[3])
-results.2$BetaDistributionMean[i] <- mean
-results.2$BetaDistributionVariance[i] <- sd
+results.2$Mean[i] <- mean
+results.2$SD[i] <- sd
 }
 ```
 
