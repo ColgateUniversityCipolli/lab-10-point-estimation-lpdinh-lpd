@@ -302,29 +302,25 @@ pdc.cleaned <- pdc|>
 ```
 
 ```{r}
+playername = c("Luke Littler", "Luke Humphries", "Michael van Gerwen", "Michael Smith", 
+              "Nathan Aspinall", "Rob Cross", "Gerwyn Price", "Peter Wright")
+legswon = rep(NA, 8)
+legslost = rep(NA, 8)
+
+for (i in 1:length(playername)){
+  # even when they lose, they still win some legs
+  win = sum(as.numeric(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner==playername[i]])) + 
+        sum(as.numeric(pdc.cleaned$LoserLegs[pdc.cleaned$Loser==playername[i]]))
+  lost = sum(as.numeric(pdc.cleaned$WinnerLegs[pdc.cleaned$Loser==playername[i]])) + 
+         sum(as.numeric(pdc.cleaned$LoserLegs[pdc.cleaned$Winner==playername[i]]))
+  legswon[i] <- win
+  legslost[i] <- lost
+}
+
 player.stats = tibble(
-  Player = c("Luke Littler", "Luke Humphries", "Michael van Gerwen", "Michael Smith", "Nathan Aspinall", "Rob Cross", "Gerwyn Price", "Peter Wright"),
-  LegsWon = c(
-    sum(as.numeric(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Luke Littler"])),
-    sum(as.numeric(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Luke Humphries"])),
-    sum(as.numeric(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Michael van Gerwen"])),
-    sum(as.numeric(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Michael Smith"])),
-    sum(as.numeric(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Nathan Aspinall"])),
-    sum(as.numeric(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Rob Cross"])),
-    sum(as.numeric(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Gerwyn Price"])),
-    sum(as.numeric(pdc.cleaned$WinnerLegs[pdc.cleaned$Winner=="Peter Wright"]))
-  ),
-  LegsLost = c(
-    sum(as.numeric(pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Luke Littler"])),
-    sum(as.numeric(pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Luke Humphries"])),
-    sum(as.numeric(pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Michael van Gerwen"])),
-    sum(as.numeric(pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Michael Smith"])),
-    sum(as.numeric(pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Nathan Aspinall"])),
-    sum(as.numeric(pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Rob Cross"])),
-    sum(as.numeric(pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Gerwyn Price"])),
-    sum(as.numeric(pdc.cleaned$LoserLegs[pdc.cleaned$Loser=="Peter Wright"]))
-  )
-)
+  Player = playername,
+  LegsWon = legswon,
+  LegsLost = legslost)
 
 player.stats <- player.stats |> 
   mutate(TotalLegs = LegsLost + LegsWon) |> 
@@ -350,11 +346,41 @@ ggplot(player.stats |>
   theme_bw() +
   labs(x = "Players",
         y = "Proportion of Legs Won") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
 ggtitle("Proportion of Legs Won for Each Player")
+
+pdc.score <- pdc |>
+  filter(Score!= "w/o",
+        Night != "Finals")|> 
+  group_by(Score) |>
+  summarize(n = n()) |>
+  mutate(Proportion = n/sum(n))
 ```
 
+```{r}
+#| label: tbl-score
+#| tbl-cap: "Scores for Each Night"
+#| tbl-align: "center"
+#| size: scriptsize
+#| echo: false
+pdc.score |> knitr::kable(digits = 2)
 
+ggplot(pdc.score) +
+  geom_col(aes (x= Score,
+                y = Proportion)) +
+  geom_hline(yintercept = 0) +
+  theme_bw()+
+  labs (x = "Score",
+        y = "Proportion")+
+ggtitle("Proportion of Score")
+
+```
+
+Comment:
+
+Luke Humphries has the highest proportion of legs won, followed closely by Luke Littler and Nathan Aspinall. From the table, we can see that Gerwyn Price, Rob Cross, and Peter Wright had more legs lost than legs won (meaning their leg spread are negative). Michael van Gerwen and Michael Smith have leg spreads of 0.
+
+Most of the matches are won by 6-5 and 6-3, meaning that most people win by close margin instead of sweeping.
 
 ## Altham's Multiplicative Binomial Distribution
 For each player in the 2024 season, use the number of legs won in each match to compute maximium likelihood estimates for $p$ and $\theta$. \
@@ -485,6 +511,7 @@ lldaltbbinom <- function(par, data, mle = F){
   alpha  <- ifelse(mle, exp(par[1]), par[1])
   beta <- ifelse(mle, exp(par[2]), par[2])
   theta <- ifelse(mle, exp(par[3]), par[3])
+  # calculate 7 times for each player instead of n times
   p <- daltbbinom(0:6, size=11, alpha, beta, theta)
   # the first location. data (x) is 0-6
   ll <- sum(log(p[data+1]))
@@ -492,7 +519,8 @@ lldaltbbinom <- function(par, data, mle = F){
 }
 # create tibble to store data
 results.2 <- tibble(
-  Player = c("Luke Littler", "Luke Humphries", "Michael van Gerwen", "Michael Smith", "Nathan Aspinall", "Rob Cross", "Gerwyn Price", "Peter Wright"),
+  Player = c("Luke Littler", "Luke Humphries", "Michael van Gerwen", "Michael Smith", 
+  "Nathan Aspinall", "Rob Cross", "Gerwyn Price", "Peter Wright"),
   Alpha = rep(NA, 8),
   Beta = rep(NA, 8),
   Theta = rep(NA, 8),
@@ -525,7 +553,7 @@ results.2$SD[i] <- sd
 
 ```{r}
 #| label: tbl-beta
-#| tbl-cap: "$a$, $b$, and $\\theta$ for each player"
+#| tbl-cap: "$\\alpha$, $\\beta$, and $\\theta$ for each player"
 #| tbl-align: "center"
 #| size: scriptsize
 #| echo: false
