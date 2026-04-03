@@ -415,6 +415,7 @@ window.Quarto = {
 <li>Make two columns <code>WinnerLegs</code> and <code>LoserLegs</code> that keep track of the number of legs each player has won</li>
 </ul>
 <p>Summarize the data. What do the data tell us about the breakdown of the results?</p>
+<p><strong>Solution</strong></p>
 <p></p>
 <div class="cell">
 <details class="code-fold">
@@ -453,7 +454,8 @@ window.Quarto = {
 <span id="cb8-20"><a href="#cb8-20"></a></span>
 <span id="cb8-21"><a href="#cb8-21"></a>player.stats <span class="ot">&lt;-</span> player.stats <span class="sc">|&gt;</span> </span>
 <span id="cb8-22"><a href="#cb8-22"></a>  <span class="fu">mutate</span>(<span class="at">TotalLegs =</span> LegsLost <span class="sc">+</span> LegsWon) <span class="sc">|&gt;</span> </span>
-<span id="cb8-23"><a href="#cb8-23"></a>  <span class="fu">mutate</span>(<span class="at">PropWin =</span> LegsWon <span class="sc">/</span> TotalLegs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-23"><a href="#cb8-23"></a>  <span class="fu">mutate</span>(<span class="at">PropWin =</span> LegsWon <span class="sc">/</span> TotalLegs) <span class="sc">|&gt;</span> </span>
+<span id="cb8-24"><a href="#cb8-24"></a>  <span class="fu">mutate</span>(<span class="at">LegsSpread =</span> LegsWon <span class="sc">-</span> LegsLost)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p></p>
@@ -474,6 +476,7 @@ Table&nbsp;1: Number of Legs Won and Lost for Each Player
 <th style="text-align: right;">LegsLost</th>
 <th style="text-align: right;">TotalLegs</th>
 <th style="text-align: right;">PropWin</th>
+<th style="text-align: right;">LegsSpread</th>
 </tr>
 </thead>
 <tbody>
@@ -483,6 +486,7 @@ Table&nbsp;1: Number of Legs Won and Lost for Each Player
 <td style="text-align: right;">155</td>
 <td style="text-align: right;">348</td>
 <td style="text-align: right;">0.55</td>
+<td style="text-align: right;">38</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Luke Humphries</td>
@@ -490,6 +494,7 @@ Table&nbsp;1: Number of Legs Won and Lost for Each Player
 <td style="text-align: right;">132</td>
 <td style="text-align: right;">301</td>
 <td style="text-align: right;">0.56</td>
+<td style="text-align: right;">37</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Michael van Gerwen</td>
@@ -497,6 +502,7 @@ Table&nbsp;1: Number of Legs Won and Lost for Each Player
 <td style="text-align: right;">135</td>
 <td style="text-align: right;">270</td>
 <td style="text-align: right;">0.50</td>
+<td style="text-align: right;">0</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Michael Smith</td>
@@ -504,6 +510,7 @@ Table&nbsp;1: Number of Legs Won and Lost for Each Player
 <td style="text-align: right;">150</td>
 <td style="text-align: right;">300</td>
 <td style="text-align: right;">0.50</td>
+<td style="text-align: right;">0</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Nathan Aspinall</td>
@@ -511,6 +518,7 @@ Table&nbsp;1: Number of Legs Won and Lost for Each Player
 <td style="text-align: right;">139</td>
 <td style="text-align: right;">282</td>
 <td style="text-align: right;">0.51</td>
+<td style="text-align: right;">4</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Rob Cross</td>
@@ -518,6 +526,7 @@ Table&nbsp;1: Number of Legs Won and Lost for Each Player
 <td style="text-align: right;">130</td>
 <td style="text-align: right;">245</td>
 <td style="text-align: right;">0.47</td>
+<td style="text-align: right;">-15</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Gerwyn Price</td>
@@ -525,6 +534,7 @@ Table&nbsp;1: Number of Legs Won and Lost for Each Player
 <td style="text-align: right;">116</td>
 <td style="text-align: right;">211</td>
 <td style="text-align: right;">0.45</td>
+<td style="text-align: right;">-21</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Peter Wright</td>
@@ -532,6 +542,7 @@ Table&nbsp;1: Number of Legs Won and Lost for Each Player
 <td style="text-align: right;">104</td>
 <td style="text-align: right;">165</td>
 <td style="text-align: right;">0.37</td>
+<td style="text-align: right;">-43</td>
 </tr>
 </tbody>
 </table>
@@ -553,7 +564,7 @@ Table&nbsp;1: Number of Legs Won and Lost for Each Player
 <div id="tbl-score" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-tbl-align="center">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-score-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;2: Scores for Each Night
+Table&nbsp;2: Score for Each Match
 </figcaption>
 <div aria-describedby="tbl-score-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -606,7 +617,7 @@ Table&nbsp;2: Scores for Each Night
 </div>
 </div>
 <p></p>
-<p>Comment:</p>
+<p>Comments:</p>
 <p>Luke Humphries has the highest proportion of legs won, followed closely by Luke Littler and Nathan Aspinall. From the table, we can see that Gerwyn Price, Rob Cross, and Peter Wright had more legs lost than legs won (meaning their leg spread are negative). Michael van Gerwen and Michael Smith have leg spreads of 0.</p>
 <p>Most of the matches are won by 6-5 and 6-3, meaning that most people win by close margin instead of sweeping.</p>
 </section>
@@ -674,19 +685,20 @@ Table&nbsp;2: Scores for Each Night
 <span id="cb10-19"><a href="#cb10-19"></a>}</span>
 <span id="cb10-20"><a href="#cb10-20"></a><span class="co"># create tibble to store data</span></span>
 <span id="cb10-21"><a href="#cb10-21"></a>results <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb10-22"><a href="#cb10-22"></a>  <span class="at">Player =</span> <span class="fu">c</span>(<span class="st">"Luke Littler"</span>, <span class="st">"Luke Humphries"</span>, <span class="st">"Michael van Gerwen"</span>, <span class="st">"Michael Smith"</span>, <span class="st">"Nathan Aspinall"</span>, <span class="st">"Rob Cross"</span>, <span class="st">"Gerwyn Price"</span>, <span class="st">"Peter Wright"</span>),</span>
-<span id="cb10-23"><a href="#cb10-23"></a>  <span class="at">Probability =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">8</span>),</span>
-<span id="cb10-24"><a href="#cb10-24"></a>  <span class="at">Theta =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">8</span>))</span>
-<span id="cb10-25"><a href="#cb10-25"></a></span>
-<span id="cb10-26"><a href="#cb10-26"></a><span class="co"># loop</span></span>
-<span id="cb10-27"><a href="#cb10-27"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(wins)){</span>
-<span id="cb10-28"><a href="#cb10-28"></a>  mle <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="at">par =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),</span>
-<span id="cb10-29"><a href="#cb10-29"></a>            <span class="at">fn =</span> lldaltbinom,</span>
-<span id="cb10-30"><a href="#cb10-30"></a>            <span class="at">data=</span> wins[[i]],</span>
-<span id="cb10-31"><a href="#cb10-31"></a>            <span class="at">mle=</span>T)</span>
-<span id="cb10-32"><a href="#cb10-32"></a>results<span class="sc">$</span>Probability[i] <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">+</span><span class="fu">exp</span>(<span class="sc">-</span>mle<span class="sc">$</span>par[<span class="dv">1</span>]))</span>
-<span id="cb10-33"><a href="#cb10-33"></a>results<span class="sc">$</span>Theta[i]<span class="ot">&lt;-</span> <span class="fu">exp</span>(mle<span class="sc">$</span>par[<span class="dv">2</span>])</span>
-<span id="cb10-34"><a href="#cb10-34"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-22"><a href="#cb10-22"></a>  <span class="at">Player =</span> <span class="fu">c</span>(<span class="st">"Luke Littler"</span>, <span class="st">"Luke Humphries"</span>, <span class="st">"Michael van Gerwen"</span>, <span class="st">"Michael Smith"</span>, </span>
+<span id="cb10-23"><a href="#cb10-23"></a>            <span class="st">"Nathan Aspinall"</span>, <span class="st">"Rob Cross"</span>, <span class="st">"Gerwyn Price"</span>, <span class="st">"Peter Wright"</span>),</span>
+<span id="cb10-24"><a href="#cb10-24"></a>  <span class="at">Probability =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">8</span>),</span>
+<span id="cb10-25"><a href="#cb10-25"></a>  <span class="at">Theta =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">8</span>))</span>
+<span id="cb10-26"><a href="#cb10-26"></a></span>
+<span id="cb10-27"><a href="#cb10-27"></a><span class="co"># loop</span></span>
+<span id="cb10-28"><a href="#cb10-28"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(wins)){</span>
+<span id="cb10-29"><a href="#cb10-29"></a>  mle <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="at">par =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),</span>
+<span id="cb10-30"><a href="#cb10-30"></a>            <span class="at">fn =</span> lldaltbinom,</span>
+<span id="cb10-31"><a href="#cb10-31"></a>            <span class="at">data=</span> wins[[i]],</span>
+<span id="cb10-32"><a href="#cb10-32"></a>            <span class="at">mle=</span>T)</span>
+<span id="cb10-33"><a href="#cb10-33"></a>results<span class="sc">$</span>Probability[i] <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">+</span><span class="fu">exp</span>(<span class="sc">-</span>mle<span class="sc">$</span>par[<span class="dv">1</span>]))</span>
+<span id="cb10-34"><a href="#cb10-34"></a>results<span class="sc">$</span>Theta[i]<span class="ot">&lt;-</span> <span class="fu">exp</span>(mle<span class="sc">$</span>par[<span class="dv">2</span>])</span>
+<span id="cb10-35"><a href="#cb10-35"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p></p>
@@ -756,6 +768,8 @@ Table&nbsp;3: <span class="math inline">\(p\)</span> and <span class="math inlin
 </div>
 </div>
 <p></p>
+<p>Comments:</p>
+<p>The probability of winning each leg for each player is all less than 0.5, with Luke Littler and Luke Humphries having the highest probability of winning each leg. They indeed ended up having high proportions of legs won and high standings overall. Their <span class="math inline">\(\theta\)</span> are all larger than 1, meaning legs won are less likely to clump together than spread out (wins of 6-5 or 6-3 are more likely), which is consistent with data summary. Peter Wright has <span class="math inline">\(\theta\)</span> of almost 1, meaning that the distribution of his probability of winning each leg is a binomial distribution, which means his legs are almost independent of each other.</p>
 </section>
 <section id="althams-multiplicative-beta-binomial-distribution-1" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="althams-multiplicative-beta-binomial-distribution-1"><span class="header-section-number">5.3</span> Altham’s Multiplicative Beta Binomial Distribution</h2>
@@ -810,7 +824,7 @@ sd(X) &amp;= \sqrt{\frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}}
 <span id="cb11-29"><a href="#cb11-29"></a><span class="co"># create tibble to store data</span></span>
 <span id="cb11-30"><a href="#cb11-30"></a>results<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
 <span id="cb11-31"><a href="#cb11-31"></a>  <span class="at">Player =</span> <span class="fu">c</span>(<span class="st">"Luke Littler"</span>, <span class="st">"Luke Humphries"</span>, <span class="st">"Michael van Gerwen"</span>, <span class="st">"Michael Smith"</span>, </span>
-<span id="cb11-32"><a href="#cb11-32"></a>  <span class="st">"Nathan Aspinall"</span>, <span class="st">"Rob Cross"</span>, <span class="st">"Gerwyn Price"</span>, <span class="st">"Peter Wright"</span>),</span>
+<span id="cb11-32"><a href="#cb11-32"></a>             <span class="st">"Nathan Aspinall"</span>, <span class="st">"Rob Cross"</span>, <span class="st">"Gerwyn Price"</span>, <span class="st">"Peter Wright"</span>),</span>
 <span id="cb11-33"><a href="#cb11-33"></a>  <span class="at">Alpha =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">8</span>),</span>
 <span id="cb11-34"><a href="#cb11-34"></a>  <span class="at">Beta =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">8</span>),</span>
 <span id="cb11-35"><a href="#cb11-35"></a>  <span class="at">Theta =</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">8</span>),</span>
@@ -1004,10 +1018,18 @@ Table&nbsp;4: <span class="math inline">\(\alpha\)</span>, <span class="math inl
 </div>
 </div>
 <p></p>
+<p>Comments:</p>
+<p>The beta distribution is a distribution of the probability of winning each leg for each player. Player 5, Nathan Aspinall, and Player 8, Peter Wright, have right-skewed and more narrow beta distributions. This means that their probability of winning each leg is much less variable and consistently low. The probability of Peter Wright having a 50% chance of winning 1 leg is very low.</p>
+<p>For the rest of the players, the probability of winning each leg appears to be highly variable, either really high or really low. Notably, Luke Littler has <span class="math inline">\(\theta=10.80\)</span> and Luke Humphries has <span class="math inline">\(\theta=6.39\)</span>, meaning their legs won alternate and almost don’t cluster–they often play very competitive, close matches.</p>
 </section>
 <section id="executive-summary" class="level2" data-number="5.4">
 <h2 data-number="5.4" class="anchored" data-anchor-id="executive-summary"><span class="header-section-number">5.4</span> Executive Summary</h2>
 <p>Summarize the work you’ve done here to provide a brief (200-300 word) data-driven summary of the 2024 Premier League season using your work in Lab 10. Your summary should be professional, clear, and all claims should be corroborated with statistical support.</p>
+<p><strong>Solution</strong></p>
+<p>The 2024 Premier League featured 8 best dart players, who competed in best-of-11-leg matches. Each player starts out with 500 points, and as they throw, points are extracted, so the player who throws first in a leg has the mathematical “head start” to reach a finish before their opponent takes another turn.</p>
+<p>Luke Littler and Luke Humphries are the most dominant players. Excluding playoffs, they won 55% and 56% of total legs played respectively. The estimates of their probability of winning each leg, as modelled by Altham’s Multiplicative Binomial Distributions, are 0.46 and 0.47, respectively. Peter Wright was the worst player of the season, winning only 37% of legs played and finishing with a leg spread of -43. Based on his Altham’s Multiplicative Beta Binomial Distribution, his probability of winning each leg is consistently low.</p>
+<p>Over half (53%) of the matches have a score of 6-5 or 6-4, meaning most of them are close and competitive and players only win in the second-to-last or last leg. This is expected since the league is composed of world-class players.</p>
+<p>Except for Peter Wright and Nathan Aspinall, the probability of winning each leg for each player is highly variable. This means that some nights they are very likely to win the match, while some nights it’s very competitive.</p>
 </section>
 </section>
 

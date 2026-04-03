@@ -201,7 +201,8 @@ What is your best assessment of what $\theta$ is doing in this setting. Consider
 **Note:** In lab 8, we saw that small $\theta$ meant wins came in bunches (clumped together), so there were more 2-0 wins in a best of three series.
 
 **Solution**
-When $\theta=0.5$, the probability of winning 6-0 or losing 0-6 is high (they're not actually playing 11 legs). When $\theta=1$, it's a Binomial distribution. When $\theta=1.5$, the player is highly likely to lose 5-6 or win 6-5 (close matches).
+
+When $\theta=0.5$, the probability of winning 6-0 is high (wins cluster). When $\theta=1$, it's a Binomial distribution. When $\theta=1.5$, the player is highly likely to lose 5-6 or win 6-5 (close matches).
 
 # Question 2
 
@@ -234,8 +235,8 @@ kth_moment <- function(k, size, prob, theta){
 Describe how you can use your answer to part a to find Method of Moments estimates for the parameters $p$ and $\theta$ for Altham's Multiplicative Binomial Distribution based on data.
 
 **Solution**
-MOM sets sample moments equal to population moments. Since the Altham's Multiplicative Binomial Distribution has 2 unknown parameters, so we'll need 2 equations:
-$$E(X^1) = x^k \cdot f_X(x)$$
+MOM sets sample moments equal to population moments. Since the Altham's Multiplicative Binomial Distribution has 2 unknown parameters, we'll need to solve these 2 equations to find $p$ and $\theta$:
+$$\bar{x} = E(X^1) = x^k \cdot f_X(x)$$
 $$E(X^2) = x^2 \cdot f_X(x)$$
 
 ## Part c
@@ -244,7 +245,7 @@ Write a function that computes the log-likelihood for Altham's Multiplicative Bi
 **Solution**
 
 ```{r}
-lldaltbinom <- function(prob, theta, x, size) {
+lldaltbinom <- function(prob, theta, x, size, mle = F) {
   # ensuring p is between 0 and 1
   prob <- ifelse(mle, 1/(1+exp(-prob)), prob) 
   # ensuring theta is positive
@@ -293,6 +294,8 @@ In `pdc2024.csv`, I have provided the data for the 2024 Premier League season. T
   
   Summarize the data. What do the data tell us about the breakdown of the results?
 
+**Solution**
+
 ```{r}
 pdc = read_csv("pdc2024.csv")
 pdc.cleaned <- pdc|>
@@ -324,7 +327,8 @@ player.stats = tibble(
 
 player.stats <- player.stats |> 
   mutate(TotalLegs = LegsLost + LegsWon) |> 
-  mutate(PropWin = LegsWon / TotalLegs)
+  mutate(PropWin = LegsWon / TotalLegs) |> 
+  mutate(LegsSpread = LegsWon - LegsLost)
 
 ```
 
@@ -359,7 +363,7 @@ pdc.score <- pdc |>
 
 ```{r}
 #| label: tbl-score
-#| tbl-cap: "Scores for Each Night"
+#| tbl-cap: "Score for Each Match"
 #| tbl-align: "center"
 #| size: scriptsize
 #| echo: false
@@ -417,7 +421,7 @@ wins = list(
 )
 ```
 
-Finding MLE
+Finding MLEs
 
 ```{r}
 # leave functions out of the loop
@@ -442,7 +446,7 @@ lldaltbinom <- function(par, data, mle = F){
 # create tibble to store data
 results <- tibble(
   Player = c("Luke Littler", "Luke Humphries", "Michael van Gerwen", "Michael Smith", 
-  "Nathan Aspinall", "Rob Cross", "Gerwyn Price", "Peter Wright"),
+            "Nathan Aspinall", "Rob Cross", "Gerwyn Price", "Peter Wright"),
   Probability = rep(NA, 8),
   Theta = rep(NA, 8))
 
@@ -468,7 +472,7 @@ results |> knitr::kable(digits = 2)
 
 Comments:
 
-The probability of winning each match for each player is all less than 0.5, with Luke Littler and Luke Humphries having the highest probability of winning each match.
+When we treat each leg as independent from each other $\theta=1$, the probability of winning each leg for each player is all less than 0.5, with Luke Littler and Luke Humphries having the highest probability of winning each leg. They indeed ended up having high proportions of legs won and high standings overall. Their $\theta$ are all larger than 1, meaning legs won are less likely to clump together than spread out (wins of 6-5 or 6-3 are more likely), which is consistent with data summary. Peter Wright has $\theta$ of almost 1, meaning that the distribution of his probability of winning each leg is a binomial distribution, which means his legs are almost independent of each other.
 
 ## Altham's Multiplicative Beta Binomial Distribution
 
@@ -524,7 +528,7 @@ lldaltbbinom <- function(par, data, mle = F){
 # create tibble to store data
 results.2 <- tibble(
   Player = c("Luke Littler", "Luke Humphries", "Michael van Gerwen", "Michael Smith", 
-  "Nathan Aspinall", "Rob Cross", "Gerwyn Price", "Peter Wright"),
+             "Nathan Aspinall", "Rob Cross", "Gerwyn Price", "Peter Wright"),
   Alpha = rep(NA, 8),
   Beta = rep(NA, 8),
   Theta = rep(NA, 8),
@@ -592,5 +596,21 @@ plots[[7]] / plots[[8]]
 
 ```
 
+Comments:
+
+The beta distribution is a distribution of the probability of winning each leg for each player. Player 8, Peter Wright, have a right-skewed and more narrow beta distribution. This means that his probability of winning each leg is much less variable and consistently low. The probability of Peter Wright having a 50% chance of winning 1 leg is very low. The probability of winning each leg for Player 5, Nathan Aspinall, has a slightly right-skewed Gaussian distribution
+
+For the rest of the players, the Beta distribution plots for has a U-shape (high density near 0 and 1). This means that the probability of winning each leg is highly variable, either really high or really low. Notably, Luke Littler has $\theta=10.80$ and Luke Humphries has $\theta=6.39$, meaning their legs won alternate and almost don't cluster--they often play very competitive, close matches.
+
 ## Executive Summary
 Summarize the work you've done here to provide a brief (200-300 word) data-driven summary of the 2024 Premier League season using your work in Lab 10. Your summary should be professional, clear, and all claims should be corroborated with statistical support.
+
+**Solution**
+
+The 2024 Premier League featured 8 best dart players, who competed in best-of-11-leg matches. Each player starts out with 500 points, and as they throw, points are extracted, so the player who throws first in a leg has the mathematical “head start” to reach a finish before their opponent takes another turn.
+
+Luke Littler and Luke Humphries are the most dominant players. Excluding playoffs, they won 55% and 56% of total legs played respectively. The estimates of their probability of winning each leg, as modelled by Altham's Multiplicative Binomial Distributions, are 0.46 and 0.47, respectively. Peter Wright was the worst player of the season, winning only 37% of legs played and finishing with a leg spread of -43. Based on his Altham’s Multiplicative Beta Binomial Distribution, his probability of winning each leg is consistently low.
+
+Over half (53%) of the matches have a score of 6-5 or 6-4, meaning most of them are close and competitive and players only win in the second-to-last or last leg. This is expected since the league is composed of world-class players.
+
+Looking at the Altham’s Multiplicative Beta Binomial Distributions, except for Peter Wright and Nathan Aspinall, the probability of winning each leg for each player is highly variable. Thus, some nights they are very likely to win the match, while some nights it's very competitive.
