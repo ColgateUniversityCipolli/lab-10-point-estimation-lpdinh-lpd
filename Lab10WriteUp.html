@@ -253,31 +253,37 @@ window.Quarto = {
 <span id="cb4-7"><a href="#cb4-7"></a>  <span class="fu">scale_x_continuous</span>(<span class="st">"x"</span>, <span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">+</span></span>
 <span id="cb4-8"><a href="#cb4-8"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>)<span class="sc">+</span></span>
 <span id="cb4-9"><a href="#cb4-9"></a>  <span class="fu">ylab</span>(<span class="st">"Probability"</span>) <span class="sc">+</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a>  <span class="fu">theme_bw</span>()</span>
-<span id="cb4-11"><a href="#cb4-11"></a></span>
-<span id="cb4-12"><a href="#cb4-12"></a>ggdat <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">|&gt;</span></span>
-<span id="cb4-13"><a href="#cb4-13"></a>  <span class="fu">mutate</span>(<span class="at">PMF =</span> <span class="fu">daltbinom</span>(x,<span class="dv">11</span>,<span class="fl">0.5</span>,<span class="dv">1</span>))</span>
-<span id="cb4-14"><a href="#cb4-14"></a>PMF.plot<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb4-15"><a href="#cb4-15"></a>  <span class="fu">geom_linerange</span>(<span class="at">data =</span> ggdat,</span>
-<span id="cb4-16"><a href="#cb4-16"></a>                 <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">ymin =</span> <span class="dv">0</span>, <span class="at">ymax =</span> PMF)) <span class="sc">+</span></span>
-<span id="cb4-17"><a href="#cb4-17"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
-<span id="cb4-18"><a href="#cb4-18"></a>  <span class="fu">scale_x_continuous</span>(<span class="st">"x"</span>, <span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">+</span></span>
-<span id="cb4-19"><a href="#cb4-19"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>)<span class="sc">+</span></span>
-<span id="cb4-20"><a href="#cb4-20"></a>  <span class="fu">ylab</span>(<span class="st">"Probability"</span>) <span class="sc">+</span></span>
-<span id="cb4-21"><a href="#cb4-21"></a>  <span class="fu">theme_bw</span>()</span>
-<span id="cb4-22"><a href="#cb4-22"></a></span>
-<span id="cb4-23"><a href="#cb4-23"></a>ggdat <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">|&gt;</span></span>
-<span id="cb4-24"><a href="#cb4-24"></a>  <span class="fu">mutate</span>(<span class="at">PMF =</span> <span class="fu">daltbinom</span>(x,<span class="dv">11</span>,<span class="fl">0.5</span>,<span class="fl">1.5</span>))</span>
-<span id="cb4-25"><a href="#cb4-25"></a>PMF.plot<span class="fl">.3</span> <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb4-26"><a href="#cb4-26"></a>  <span class="fu">geom_linerange</span>(<span class="at">data =</span> ggdat,</span>
-<span id="cb4-27"><a href="#cb4-27"></a>                 <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">ymin =</span> <span class="dv">0</span>, <span class="at">ymax =</span> PMF)) <span class="sc">+</span></span>
-<span id="cb4-28"><a href="#cb4-28"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
-<span id="cb4-29"><a href="#cb4-29"></a>  <span class="fu">scale_x_continuous</span>(<span class="st">"x"</span>, <span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">+</span></span>
-<span id="cb4-30"><a href="#cb4-30"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>)<span class="sc">+</span></span>
-<span id="cb4-31"><a href="#cb4-31"></a>  <span class="fu">ylab</span>(<span class="st">"Probability"</span>) <span class="sc">+</span></span>
-<span id="cb4-32"><a href="#cb4-32"></a>  <span class="fu">theme_bw</span>()</span>
-<span id="cb4-33"><a href="#cb4-33"></a></span>
-<span id="cb4-34"><a href="#cb4-34"></a>PMF.plot<span class="fl">.1</span> <span class="sc">/</span> PMF.plot<span class="fl">.2</span> <span class="sc">/</span> PMF.plot<span class="fl">.3</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-10"><a href="#cb4-10"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a>  <span class="fu">ggtitle</span>(<span class="st">"Distribution when theta=0.5"</span>)<span class="sc">+</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>))</span>
+<span id="cb4-13"><a href="#cb4-13"></a></span>
+<span id="cb4-14"><a href="#cb4-14"></a>ggdat <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a>  <span class="fu">mutate</span>(<span class="at">PMF =</span> <span class="fu">daltbinom</span>(x,<span class="dv">11</span>,<span class="fl">0.5</span>,<span class="dv">1</span>))</span>
+<span id="cb4-16"><a href="#cb4-16"></a>PMF.plot<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a>  <span class="fu">geom_linerange</span>(<span class="at">data =</span> ggdat,</span>
+<span id="cb4-18"><a href="#cb4-18"></a>                 <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">ymin =</span> <span class="dv">0</span>, <span class="at">ymax =</span> PMF)) <span class="sc">+</span></span>
+<span id="cb4-19"><a href="#cb4-19"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb4-20"><a href="#cb4-20"></a>  <span class="fu">scale_x_continuous</span>(<span class="st">"x"</span>, <span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">+</span></span>
+<span id="cb4-21"><a href="#cb4-21"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>)<span class="sc">+</span></span>
+<span id="cb4-22"><a href="#cb4-22"></a>  <span class="fu">ylab</span>(<span class="st">"Probability"</span>) <span class="sc">+</span></span>
+<span id="cb4-23"><a href="#cb4-23"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb4-24"><a href="#cb4-24"></a>  <span class="fu">ggtitle</span>(<span class="st">"Distribution when theta=1"</span>) <span class="sc">+</span></span>
+<span id="cb4-25"><a href="#cb4-25"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>))</span>
+<span id="cb4-26"><a href="#cb4-26"></a></span>
+<span id="cb4-27"><a href="#cb4-27"></a>ggdat <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-28"><a href="#cb4-28"></a>  <span class="fu">mutate</span>(<span class="at">PMF =</span> <span class="fu">daltbinom</span>(x,<span class="dv">11</span>,<span class="fl">0.5</span>,<span class="fl">1.5</span>))</span>
+<span id="cb4-29"><a href="#cb4-29"></a>PMF.plot<span class="fl">.3</span> <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb4-30"><a href="#cb4-30"></a>  <span class="fu">geom_linerange</span>(<span class="at">data =</span> ggdat,</span>
+<span id="cb4-31"><a href="#cb4-31"></a>                 <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">ymin =</span> <span class="dv">0</span>, <span class="at">ymax =</span> PMF)) <span class="sc">+</span></span>
+<span id="cb4-32"><a href="#cb4-32"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb4-33"><a href="#cb4-33"></a>  <span class="fu">scale_x_continuous</span>(<span class="st">"x"</span>, <span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">+</span></span>
+<span id="cb4-34"><a href="#cb4-34"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>)<span class="sc">+</span></span>
+<span id="cb4-35"><a href="#cb4-35"></a>  <span class="fu">ylab</span>(<span class="st">"Probability"</span>) <span class="sc">+</span></span>
+<span id="cb4-36"><a href="#cb4-36"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb4-37"><a href="#cb4-37"></a>  <span class="fu">ggtitle</span>(<span class="st">"Distribution when theta=1.5"</span>)<span class="sc">+</span></span>
+<span id="cb4-38"><a href="#cb4-38"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>))</span>
+<span id="cb4-39"><a href="#cb4-39"></a></span>
+<span id="cb4-40"><a href="#cb4-40"></a>PMF.plot<span class="fl">.1</span> <span class="sc">/</span> PMF.plot<span class="fl">.2</span> <span class="sc">/</span> PMF.plot<span class="fl">.3</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -293,7 +299,8 @@ window.Quarto = {
 <h2 data-number="3.3" class="anchored" data-anchor-id="part-c"><span class="header-section-number">3.3</span> Part c</h2>
 <p>What is your best assessment of what <span class="math inline">\(\theta\)</span> is doing in this setting. Consider when a 6-0 blowout is most likely, and when a 5-6 nail-biter is most likely. Note here we should treat the match as a fixed <span class="math inline">\(n=11\)</span> as we did for <span class="math inline">\(n=3\)</span> in Lab 8.<br>
 <strong>Note:</strong> In lab 8, we saw that small <span class="math inline">\(\theta\)</span> meant wins came in bunches (clumped together), so there were more 2-0 wins in a best of three series.</p>
-<p><strong>Solution</strong> When <span class="math inline">\(\theta=0.5\)</span>, the probability of winning 6-0 or losing 0-6 is high (they’re not actually playing 11 legs). When <span class="math inline">\(\theta=1\)</span>, it’s a Binomial distribution. When <span class="math inline">\(\theta=1.5\)</span>, the player is highly likely to lose 5-6 or win 6-5 (close matches).</p>
+<p><strong>Solution</strong></p>
+<p>When <span class="math inline">\(\theta=0.5\)</span>, the probability of winning 6-0 is high (wins cluster). When <span class="math inline">\(\theta=1\)</span>, it’s a Binomial distribution. When <span class="math inline">\(\theta=1.5\)</span>, the player is highly likely to lose 5-6 or win 6-5 (close matches).</p>
 </section>
 </section>
 <section id="question-2" class="level1" data-number="4">
@@ -329,7 +336,7 @@ window.Quarto = {
 <section id="part-b-1" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="part-b-1"><span class="header-section-number">4.2</span> Part b</h2>
 <p>Describe how you can use your answer to part a to find Method of Moments estimates for the parameters <span class="math inline">\(p\)</span> and <span class="math inline">\(\theta\)</span> for Altham’s Multiplicative Binomial Distribution based on data.</p>
-<p><strong>Solution</strong> MOM sets sample moments equal to population moments. Since the Altham’s Multiplicative Binomial Distribution has 2 unknown parameters, so we’ll need 2 equations: <span class="math display">\[E(X^1) = x^k \cdot f_X(x)\]</span> <span class="math display">\[E(X^2) = x^2 \cdot f_X(x)\]</span></p>
+<p><strong>Solution</strong> MOM sets sample moments equal to population moments. Since the Altham’s Multiplicative Binomial Distribution has 2 unknown parameters, we’ll need to solve these 2 equations to find <span class="math inline">\(p\)</span> and <span class="math inline">\(\theta\)</span>: <span class="math display">\[\bar{x} = E(X^1) = x^k \cdot f_X(x)\]</span> <span class="math display">\[E(X^2) = x^2 \cdot f_X(x)\]</span></p>
 </section>
 <section id="part-c-1" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="part-c-1"><span class="header-section-number">4.3</span> Part c</h2>
@@ -339,7 +346,7 @@ window.Quarto = {
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>lldaltbinom <span class="ot">&lt;-</span> <span class="cf">function</span>(prob, theta, x, size) {</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>lldaltbinom <span class="ot">&lt;-</span> <span class="cf">function</span>(prob, theta, x, size, <span class="at">mle =</span> F) {</span>
 <span id="cb6-2"><a href="#cb6-2"></a>  <span class="co"># ensuring p is between 0 and 1</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a>  prob <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(mle, <span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">+</span><span class="fu">exp</span>(<span class="sc">-</span>prob)), prob) </span>
 <span id="cb6-4"><a href="#cb6-4"></a>  <span class="co"># ensuring theta is positive</span></span>
@@ -659,7 +666,7 @@ Table&nbsp;2: Score for Each Match
 </details>
 </div>
 <p></p>
-<p>Finding MLE</p>
+<p>Finding MLEs</p>
 <p></p>
 <div class="cell">
 <details class="code-fold">
@@ -769,7 +776,7 @@ Table&nbsp;3: <span class="math inline">\(p\)</span> and <span class="math inlin
 </div>
 <p></p>
 <p>Comments:</p>
-<p>The probability of winning each leg for each player is all less than 0.5, with Luke Littler and Luke Humphries having the highest probability of winning each leg. They indeed ended up having high proportions of legs won and high standings overall. Their <span class="math inline">\(\theta\)</span> are all larger than 1, meaning legs won are less likely to clump together than spread out (wins of 6-5 or 6-3 are more likely), which is consistent with data summary. Peter Wright has <span class="math inline">\(\theta\)</span> of almost 1, meaning that the distribution of his probability of winning each leg is a binomial distribution, which means his legs are almost independent of each other.</p>
+<p>When we treat each leg as independent from each other <span class="math inline">\(\theta=1\)</span>, the probability of winning each leg for each player is all less than 0.5, with Luke Littler and Luke Humphries having the highest probability of winning each leg. They indeed ended up having high proportions of legs won and high standings overall. Their <span class="math inline">\(\theta\)</span> are all larger than 1, meaning legs won are less likely to clump together than spread out (wins of 6-5 or 6-3 are more likely), which is consistent with data summary. Peter Wright has <span class="math inline">\(\theta\)</span> of almost 1, meaning that the distribution of his probability of winning each leg is a binomial distribution, which means his legs are almost independent of each other.</p>
 </section>
 <section id="althams-multiplicative-beta-binomial-distribution-1" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="althams-multiplicative-beta-binomial-distribution-1"><span class="header-section-number">5.3</span> Altham’s Multiplicative Beta Binomial Distribution</h2>
@@ -1019,8 +1026,8 @@ Table&nbsp;4: <span class="math inline">\(\alpha\)</span>, <span class="math inl
 </div>
 <p></p>
 <p>Comments:</p>
-<p>The beta distribution is a distribution of the probability of winning each leg for each player. Player 5, Nathan Aspinall, and Player 8, Peter Wright, have right-skewed and more narrow beta distributions. This means that their probability of winning each leg is much less variable and consistently low. The probability of Peter Wright having a 50% chance of winning 1 leg is very low.</p>
-<p>For the rest of the players, the probability of winning each leg appears to be highly variable, either really high or really low. Notably, Luke Littler has <span class="math inline">\(\theta=10.80\)</span> and Luke Humphries has <span class="math inline">\(\theta=6.39\)</span>, meaning their legs won alternate and almost don’t cluster–they often play very competitive, close matches.</p>
+<p>The beta distribution is a distribution of the probability of winning each leg for each player. Player 8, Peter Wright, have a right-skewed and more narrow beta distribution. This means that his probability of winning each leg is much less variable and consistently low. The probability of Peter Wright having a 50% chance of winning 1 leg is very low. The probability of winning each leg for Player 5, Nathan Aspinall, has a slightly right-skewed Gaussian distribution</p>
+<p>For the rest of the players, the Beta distribution plots for has a U-shape (high density near 0 and 1). This means that the probability of winning each leg is highly variable, either really high or really low. Notably, Luke Littler has <span class="math inline">\(\theta=10.80\)</span> and Luke Humphries has <span class="math inline">\(\theta=6.39\)</span>, meaning their legs won alternate and almost don’t cluster–they often play very competitive, close matches.</p>
 </section>
 <section id="executive-summary" class="level2" data-number="5.4">
 <h2 data-number="5.4" class="anchored" data-anchor-id="executive-summary"><span class="header-section-number">5.4</span> Executive Summary</h2>
@@ -1029,7 +1036,7 @@ Table&nbsp;4: <span class="math inline">\(\alpha\)</span>, <span class="math inl
 <p>The 2024 Premier League featured 8 best dart players, who competed in best-of-11-leg matches. Each player starts out with 500 points, and as they throw, points are extracted, so the player who throws first in a leg has the mathematical “head start” to reach a finish before their opponent takes another turn.</p>
 <p>Luke Littler and Luke Humphries are the most dominant players. Excluding playoffs, they won 55% and 56% of total legs played respectively. The estimates of their probability of winning each leg, as modelled by Altham’s Multiplicative Binomial Distributions, are 0.46 and 0.47, respectively. Peter Wright was the worst player of the season, winning only 37% of legs played and finishing with a leg spread of -43. Based on his Altham’s Multiplicative Beta Binomial Distribution, his probability of winning each leg is consistently low.</p>
 <p>Over half (53%) of the matches have a score of 6-5 or 6-4, meaning most of them are close and competitive and players only win in the second-to-last or last leg. This is expected since the league is composed of world-class players.</p>
-<p>Except for Peter Wright and Nathan Aspinall, the probability of winning each leg for each player is highly variable. This means that some nights they are very likely to win the match, while some nights it’s very competitive.</p>
+<p>Looking at the Altham’s Multiplicative Beta Binomial Distributions, except for Peter Wright and Nathan Aspinall, the probability of winning each leg for each player is highly variable. Thus, some nights they are very likely to win the match, while some nights it’s very competitive.</p>
 </section>
 </section>
 
